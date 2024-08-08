@@ -1,6 +1,11 @@
 ﻿#include "dllmain.h"
 
 DWORD WINAPI init(LPVOID lpParam) {
+    FileUtils::createFolder("Milkyway");
+    FileUtils::createAssetsFolder("Logs");
+    FileUtils::createAssetsFolder("Audios");
+    FileUtils::createAssetsFolder("Configs");
+    FileUtils::createAssetsFolder("Assets");
     return 0;
 }
 
