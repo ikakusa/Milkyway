@@ -3,10 +3,15 @@
 
 //Hooks
 #include "KeymapHook/KeymapHook.h"
+#include "TrialManager/TrialManager.h"
 //
-
+class Hook;
 class HookManager {
+private:
+	static inline std::vector<Hook*> hooks;
 public:
-	static std::vector<Hook*> hooks;
 	static void initHooks();
+	static void DeleteHooks() {
+		hooks.clear();
+	}
 };

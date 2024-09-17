@@ -1,4 +1,5 @@
 #pragma once
+#include <fstream>
 
 __forceinline void writelog(const char* fmt, ...) {
     char buffer[256];

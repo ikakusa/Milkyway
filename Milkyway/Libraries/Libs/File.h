@@ -1,5 +1,8 @@
 #pragma once
+#include <filesystem>
 #include "StringUtils.h"
+
+namespace fs = std::filesystem;
 namespace FileUtils {
 	static bool createFolder(std::string folderName) {
 		char* value;

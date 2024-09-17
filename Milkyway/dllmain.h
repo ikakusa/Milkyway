@@ -1,12 +1,9 @@
 ﻿#pragma once
 
-#define WIN32_LEAN_AND_MEAN             // Windows ヘッダーからほとんど使用されていない部分を除外する
-// Windows ヘッダー ファイル
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include <filesystem>
-namespace fs = std::filesystem;
-
+#include <map>
 #include <string>
 #include <stdio.h>
 #include <iostream>
@@ -20,9 +17,17 @@ namespace fs = std::filesystem;
 #include <utility>
 #include <vector>
 
-#include <MinHook.h>
+#include <MinHook/MinHook.h>
+#include "Milky/Utils/Utility.h"
+#include "Milky/Utils/TextCol.h"
 #include "Milky/Logger/Logger.h"
 #include "Libraries/Libraries.h"
 #include "Milky/Hooks/Hooks.h"
 #include "Milky/Hooks/HookManager.h"
 #include "Milky/GameData.h"
+#include "Milky/SDK/SDK.h"
+
+class dllmain {
+public:
+	static bool isRunning;
+};
