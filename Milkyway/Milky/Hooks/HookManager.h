@@ -3,6 +3,7 @@
 
 //Hooks
 #include "KeymapHook/KeymapHook.h"
+#include "CommandHook/CommandHook.h"
 #include "TrialManager/TrialManager.h"
 //
 class Hook;

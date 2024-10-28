@@ -1,11 +1,10 @@
 #pragma once
 #include <MinHook/MinHook.h>
 #include <memory>
-#include "../../Libraries/Libraries.h"
-#include "../../Milky/Logger/Logger.h"
+#include <Psapi.h>
 #include <libhat.hpp>
-#include <psapi.h>
-
+#include <string>
+#include "xorstr.hpp"
 class FuncHook;
 class MemoryUtils {
 private:
@@ -23,17 +22,7 @@ private:
 	}
 
 	static uintptr_t SlideAddress(uintptr_t offset) { return getBase() + offset; }
-	static std::optional<uintptr_t> SigScanSafe(std::string_view signature) {
-		const auto parsed = hat::parse_signature(signature);
-		if (!parsed.has_value()) writelog("Invalid signature! %s", signature.data());
-
-		const auto begin = reinterpret_cast<std::byte*>(getBase());
-		const auto end = begin + GetMinecraftSize();
-		const auto result = hat::find_pattern(begin, end, parsed.value());
-
-		if (!result.has_result()) return std::nullopt;
-		return reinterpret_cast<uintptr_t>(result.get());
-	}
+	static std::optional<uintptr_t> SigScanSafe(std::string_view signature);
 public:
 	static inline bool isInitialized = false;
 	static void init();
@@ -43,15 +32,11 @@ public:
 #define GET_BYTE(x) (GET_BITS(x[0]) << 4 | GET_BITS(x[1]))
 #define GET_BITS(x) (INRANGE((x & (~0x20)), 'A', 'F') ? ((x & (~0x20)) - 'A' + 0xa) : (INRANGE(x, '0', '9') ? x - '0' : 0))
 public:
-	static uintptr_t SigScan(std::string_view signature) {
-		auto result = SigScanSafe(signature);
-		if (!result.has_value()) writelog("Failed to find signature \"%s\"", signature.data());
-		return result.value();
-	}
+	static uintptr_t findSig(std::string_view signature);
 	static uintptr_t** getVtable(const char* szSignature, int offset) {
 		uintptr_t** signatureOffset = 0x0;
 		if (signatureOffset == 0x0) {
-			uintptr_t sigOffset = SigScan(szSignature);
+			uintptr_t sigOffset = findSig(szSignature);
 			if (sigOffset != 0x0) {
 				int finalOffset = *reinterpret_cast<int*>((sigOffset + offset));
 				signatureOffset = reinterpret_cast<uintptr_t**>(sigOffset + finalOffset + 7);
@@ -174,5 +159,5 @@ static __forceinline TRet CallFunc(uintptr_t address, TArgs... args) {
 	return oFunc(args...);
 }
 
-#define SigScan(sig) MemoryUtils::SigScan(xorstr_(sig))
+#define SigScan(sig) MemoryUtils::findSig(xorstr_(sig))
 #define ScanVtable(sig, offset) MemoryUtils::getVtable(xorstr_(sig), offset)

@@ -1,4 +1,8 @@
 ﻿#include "dllmain.h"
+#include <Libraries.h>
+#include "Milky/Hooks/HookManager.h"
+#include "Milky/Utils/TextCol.h"
+#include "Milky/Logger/Logger.h"
 
 bool dllmain::isRunning = true;
 auto GetDllMod(void) -> HMODULE {

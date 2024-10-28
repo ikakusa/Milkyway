@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
-
+#include "../SDK/SDK.h"
 class FuncHook;
 class Hook {
 public:

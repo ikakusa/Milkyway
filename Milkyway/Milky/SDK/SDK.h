@@ -1,12 +1,28 @@
 #pragma once
 #include <utility>
-#include "../GameData.h"
 
+#include "ClientInstance/GuiData.h"
+#include "ClientInstance/LevelRenderer.h"
+#include "ClientInstance/LoopBackPacketSender.h"
+#include "ClientInstance/MinecraftGame.h"
+#include "ClientInstance/ClientInstance.h"
+#include "mce/mce.h"
+#include "McJson/McJson.h"
+#include "MobEffect/MobEffect.h"
 #include "Actor/Actor.h"
 #include "ScreenView/ScreenView.h"
 #include "ScreenCtx/ScreenCtx.h"
 #include "RenderContext/RenderContext.h"
+#include "Block/Block.h"
+#include "ContainerScreen/ContainerScreenController.h"
+#include "Dimension/Dimension.h"
+#include "GameMode/GameMode.h"
+#include "HoverTextRenderer/HoverTextRenderer.h"
+#include "Item/Item.h"
+#include "Item/ItemStack.h"
+#include "Item/Container.h"
 
-#include "ClientInstance/ClientInstance.h"
-#include "HashedString/HashedString.h"
-
+#include "Level/Level.h"
+#include "UIControl/UIControl.h"
+#include "UIScene/UIScene.h"
+#include "Packet/Packet.h"
