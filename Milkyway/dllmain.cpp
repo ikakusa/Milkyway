@@ -1,10 +1,12 @@
 ﻿#include "dllmain.h"
-#include <Libraries.h>
 #include "Milky/Hooks/HookManager.h"
 #include "Milky/Utils/TextCol.h"
 #include "Milky/Logger/Logger.h"
+#include "Milky/Modules/ModuleManager.h"
 
 bool dllmain::isRunning = true;
+HMODULE dllmain::mod = nullptr;
+
 auto GetDllMod(void) -> HMODULE {
     MEMORY_BASIC_INFORMATION info;
     size_t len = VirtualQueryEx(GetCurrentProcess(), (void*)GetDllMod, &info, sizeof(info));
@@ -20,9 +22,9 @@ DWORD WINAPI init(LPVOID lpParam) {
     FileUtils::createAssetsFolder("Assets");
 
     MH_Initialize();
-
     initColors();
     HookManager::initHooks();
+    moduleMgr.Initialize();
 
     while (dllmain::isRunning) {
         if ((GameData::isKeyDown('L') && GameData::isKeyDown(VK_CONTROL)) || GameData::isKeyDown(VK_END)) {
@@ -32,15 +34,17 @@ DWORD WINAPI init(LPVOID lpParam) {
         Sleep(100);
     }
 
+    moduleMgr.get<ClickGui>()->setEnabled(false);
+    moduleMgr.saveConfig();
+    moduleMgr.uninitialize();
     HookManager::DeleteHooks();
+    kiero::shutdown();
     MH_Uninitialize();
     Sleep(1000);
     writelog("Ejected!");
 
     FreeLibraryAndExitThread(GetDllMod(), 1);
     return 1;
-
-    return 0;
 }
 
 BOOL APIENTRY DllMain( HMODULE hModule,
@@ -51,6 +55,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
+        dllmain::mod = hModule;
         CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)init, hModule, NULL, NULL);
         DisableThreadLibraryCalls(hModule);
     case DLL_THREAD_ATTACH:

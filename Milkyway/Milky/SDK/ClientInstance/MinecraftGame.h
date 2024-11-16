@@ -22,7 +22,7 @@ public:
 
 class MinecraftGame {
 public:
-	BUILD_ACCESS(bool, canMove, 0x1A8);
+	BUILD_ACCESS(bool, canMove, 0x1A0);
 public:
 	std::string* getPlayerName() {
 		std::string out;

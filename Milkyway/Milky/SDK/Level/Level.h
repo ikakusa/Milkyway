@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <unordered_map>
 #include "../Actor/Actor.h"
 
 class HitResult {
@@ -25,7 +26,11 @@ public:
 };
 class Level {
 public:
+    typedef std::unordered_map<__int64, PlayerListEntry> playerListdef;
 	std::vector<Actor*> getRuntimeActorList();
+    playerListdef* getPlayerList() {
+        return *reinterpret_cast<playerListdef**>(this + 0xBF0);
+    }
 
 	BUILD_ACCESS(HitResult*, hitResult, 0x0B38);
 };

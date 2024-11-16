@@ -131,26 +131,26 @@ public:
 	BUILD_ACCESS(UIScene*, currentScene, 0x100);
 
 private:
-	virtual void Destructor() {};
+	virtual void Destructor() = 0;
 public:
-	virtual float getLineLength(void* font, std::string* str, float measureCalculation, bool calculateWidth) {};
+	virtual float getLineLength(void* font, std::string* str, float measureCalculation, bool calculateWidth) = 0;
 private:
-	virtual int getTextAlpha() {};
-	virtual void setTextAlpha() {};
-	virtual void drawDebugText() {};
+	virtual int getTextAlpha() = 0;
+	virtual void setTextAlpha() = 0;
+	virtual void drawDebugText() = 0;
 public:
-	virtual void drawText(void* font, const float* pos, std::string* text, const float* color, float alpha, unsigned int textAlignment, const TextMeasureData* textMeasureData, const uintptr_t* caretMeasureData) {};
-	virtual void flushText(float flushDelta) {};
+	virtual void drawText(void* font, const float* pos, std::string* text, const float* color, float alpha, unsigned int textAlignment, const TextMeasureData* textMeasureData, const uintptr_t* caretMeasureData) = 0;
+	virtual void flushText(float flushDelta) = 0;
 
-	virtual void drawImage(const TexturePtr* a2, vec2 const& ImagePos, vec2 const& ImageDimension, vec2 const& uvPos, vec2 const& uvSize) {};
-	virtual void drawNineslice() {};
-	virtual void flushImages(Color& color, float opacity, HashedString& hashedString) {};
+	virtual void drawImage(const TexturePtr* a2, vec2 const& ImagePos, vec2 const& ImageDimension, vec2 const& uvPos, vec2 const& uvSize) = 0;
+	virtual void drawNineslice() = 0;
+	virtual void flushImages(Color& color, float opacity, HashedString& hashedString) = 0;
 private:
-	virtual void beginSharedMeshBatch() {};
-	virtual void endSharedMeshBatch() {};
+	virtual void beginSharedMeshBatch() = 0;
+	virtual void endSharedMeshBatch() = 0;
 public:
-	virtual void drawRectangle(vec4 const& rect, Color const& colour, float alpha, int width) {};
-	virtual void fillRectangle(vec4 const& rect, Color const& colour, float alpha) {};
+	virtual void drawRectangle(vec4 const& rect, Color const& colour, float alpha, int width) = 0;
+	virtual void fillRectangle(vec4 const& rect, Color const& colour, float alpha) = 0;
 
 	TexturePtr* getTexture(TexturePtr* texture, ResourceLocation* resourceLocation)
 	{

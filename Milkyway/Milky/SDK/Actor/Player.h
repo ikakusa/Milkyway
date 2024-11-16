@@ -9,6 +9,6 @@ class Player : public Mob {
 public:
 	BUILD_ACCESS(SerializedSkin, serializedSkin, 0x780);
 	BUILD_ACCESS(ContainerManagerModel*, containerManagerModel, 0x750);
-	BUILD_ACCESS(PlayerInventoryProxy*, Supplies, 0x760);
+	BUILD_ACCESS(PlayerInventoryProxy*, Supplies, 0x628);
 	void setHotbarSlot(int slot, bool silent = false);
 };

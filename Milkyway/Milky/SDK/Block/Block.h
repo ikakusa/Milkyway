@@ -1,5 +1,6 @@
 #pragma once
 #include <Colors/Color.h>
+#include <optional>
 
 class BlockLegacy;
 class BlockRenderLayer;

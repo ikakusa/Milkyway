@@ -2,7 +2,6 @@
 #include <MinHook/MinHook.h>
 #include <memory>
 #include <Psapi.h>
-#include <libhat.hpp>
 #include <string>
 #include "xorstr.hpp"
 class FuncHook;
@@ -22,7 +21,6 @@ private:
 	}
 
 	static uintptr_t SlideAddress(uintptr_t offset) { return getBase() + offset; }
-	static std::optional<uintptr_t> SigScanSafe(std::string_view signature);
 public:
 	static inline bool isInitialized = false;
 	static void init();
@@ -32,7 +30,7 @@ public:
 #define GET_BYTE(x) (GET_BITS(x[0]) << 4 | GET_BITS(x[1]))
 #define GET_BITS(x) (INRANGE((x & (~0x20)), 'A', 'F') ? ((x & (~0x20)) - 'A' + 0xa) : (INRANGE(x, '0', '9') ? x - '0' : 0))
 public:
-	static uintptr_t findSig(std::string_view signature);
+	static uintptr_t findSig(const char* szSignature);
 	static uintptr_t** getVtable(const char* szSignature, int offset) {
 		uintptr_t** signatureOffset = 0x0;
 		if (signatureOffset == 0x0) {
@@ -152,6 +150,13 @@ static __forceinline void patchBytes(void* dst, void* src, unsigned int size) {
 	if (!VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect)) return;
 	memcpy(dst, src, size);
 	if (!VirtualProtect(dst, size, oldprotect, &oldprotect)) return;
+}
+template <typename T>
+static __forceinline void SafeRelease(T*& pPtr) {
+	if (pPtr != nullptr) {
+		pPtr->Release();
+		pPtr = nullptr;
+	}
 }
 template <typename TRet, typename... TArgs>
 static __forceinline TRet CallFunc(uintptr_t address, TArgs... args) {

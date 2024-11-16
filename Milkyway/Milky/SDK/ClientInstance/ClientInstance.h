@@ -12,17 +12,31 @@ class LevelRendererPlayer;
 class LoopbackPacketSender;
 class ClientInstance {
 public:
-	BUILD_ACCESS(GuiData*, guiData, 0x558);
-	BUILD_ACCESS(LoopbackPacketSender*, loopbackSender, 0xF0);
-	BUILD_ACCESS(float, fovX, 0x6F0);
-	BUILD_ACCESS(float, fovY, 0x704);
-	BUILD_ACCESS(glmatrixf, GLMatrix, 0x330);
-	BUILD_ACCESS(class LevelRenderer*, levelRenderer, 0xE0);//0xD0
+	BUILD_ACCESS(GuiData*, guiData, 0x590);
+	BUILD_ACCESS(LoopbackPacketSender*, loopbackSender, 0xF8);
+	BUILD_ACCESS(float, fovX, 0x728);
+	BUILD_ACCESS(float, fovY, 0x738);
+	BUILD_ACCESS(glmatrixf, GLMatrix, 0x364);
+	BUILD_ACCESS(class LevelRenderer*, levelRenderer, 0xE8);//0xD0
 	BUILD_ACCESS(Minecraft*, minecraft, 0xD0);//0xD0
+	BUILD_ACCESS(const char*, serverIP, 0x8A8);
+	BUILD_ACCESS(const char*, lastServerName, 0x968);
+	BUILD_ACCESS(MinecraftGame*, mcGame, 0xD0);
 
 	vec2 getFov() {
 		return vec2(fovX, fovY);
 	}
+
+    static std::shared_ptr<Packet> createPacket(int packetId) {
+        static uintptr_t Address;
+
+        if (Address == NULL) {
+            Address = SigScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B F9 48 89 4C 24 ?? 33 ED 81");
+        }
+
+        auto pFunction = reinterpret_cast<std::shared_ptr<Packet>(__fastcall*)(int)>(Address);
+        return pFunction(packetId);
+    }
 
 	//LevelRenderer* getLevelRenderer() {
 	//	return reinterpret_cast<LevelRenderer*>(*(uintptr_t*)this + 0xE0);
@@ -60,17 +74,18 @@ public:
 		return true;
 	}
 
-	class LocalPlayer* getLocalPlayer() {
-		if (this != nullptr) return CallVFunc<29, class LocalPlayer*>(this); //ClientInstance::getLocalPlayer();
-		return nullptr;
-	}
+    MinecraftGame* getMinecraftGame() {
+        return *reinterpret_cast<MinecraftGame**>(this + 0xD0); //1.21.4x
+    }
 
-	MinecraftGame* getMinecraftGame() {
-		return reinterpret_cast<MinecraftGame*>(*(uintptr_t*)this + 0xC8);
-	}
+	class LocalPlayer* getLocalPlayer() {
+		if (this != nullptr) return CallVFunc<30, class LocalPlayer*>(this); //ClientInstance::getLocalPlayer();
+		return nullptr;
+	}// unused
+
 	void grabCursor()
 	{
-		return CallVFunc<332, void>(this); //ClientInstance::grabMouse(); 1.21.1
+		return CallVFunc<338, void>(this); //ClientInstance::grabMouse(); 1.21.4x
 	}
 
 	BlockSource* getRegion() {
@@ -79,7 +94,7 @@ public:
 
 	void releaseCursor()
 	{
-		return CallVFunc<333, void>(this); //ClientInstance::releaseMouse(); 1.21.1
+		return CallVFunc<339, void>(this); //ClientInstance::releaseMouse(); 1.21.4x
 	}
 };
 

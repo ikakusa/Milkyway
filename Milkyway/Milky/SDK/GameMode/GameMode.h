@@ -37,7 +37,7 @@ private:
 	char pad_0018[4];      
 public:
 	//float destroyProgress;
-	BUILD_ACCESS(float, destroyProgress, 0x20);
+	BUILD_ACCESS(float, destroyProgress, 0x24);
 	void baseUseItem(ItemStack* stack) {
 		using baseUseItem = void (*)(GameMode*, ItemStack*);
 		static baseUseItem baseUseItemFunc = reinterpret_cast<baseUseItem>(SigScan("48 89 5C 24 ?? 48 89 74 24 ?? 55 57 41 56 48 8D 6C 24 90 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 ?? 48 8B F2 48 8B F9 45 33 F6 4C 89 75 ?? 48 8D 4D ?? E8 ?? ?? ?? ?? 90 48")); // 1.21.2

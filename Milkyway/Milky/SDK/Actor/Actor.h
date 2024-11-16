@@ -10,6 +10,12 @@
 #include "../mce/mce.h"
 #include "../McJson/McJson.h"
 
+class PlayerListEntry {
+public:
+    BUILD_ACCESS(std::string, name, 0x18);
+    BUILD_ACCESS(std::string, xuid, 0x38);
+};
+
 class MobEffectInstance;
 class Level;
 class ItemStack;
@@ -68,13 +74,16 @@ public:
         return func(a1, &a2);
     }
 public:
-    BUILD_ACCESS(StateVectorComponent*, state, 0x290);
+    BUILD_ACCESS(StateVectorComponent*, state, 0x270);
     BUILD_ACCESS(AABB*, aabb, 0x298);
     BUILD_ACCESS(struct AABB, noPtrAabb, 0x298);
-    BUILD_ACCESS(Level*, level, 0x258);
+    BUILD_ACCESS(Level*, level, 0x230);
     BUILD_ACCESS(EntityContext, entityCtx, 0x08);
     BUILD_ACCESS(EntityContext*, entityCtxPtr, 0x08);
     BUILD_ACCESS(ActorRotationComponent*, rotationComponent, 0x28);
+    BUILD_ACCESS(__int64, forEntityTypeID1, 0x10);
+    BUILD_ACCESS(int*, forEntityTypeID2, 0x18);
+    BUILD_ACCESS(ItemStack*, selectedItem, 0x628);
 
     float getTicksPerSecond() {
         if (this != nullptr) {
@@ -172,7 +181,7 @@ public:
 
     Level* getLevel()
     {
-        return *reinterpret_cast<Level**>(reinterpret_cast<__int64>(this) + 0x250);
+        return *reinterpret_cast<Level**>(reinterpret_cast<__int64>(this) + 0x230);
     }
 
     void swing() {
@@ -209,15 +218,14 @@ public:
     std::string* getNametag() {
         uintptr_t sig = NULL;
         using name = std::string* (__thiscall*)(Actor*);
-        static name namef = reinterpret_cast<name>(SigScan("48 83 EC ? 48 8B 81 ? ? ? ? 48 85 C0 74 3B 48 8B 08 BA ? ? ? ? 48 8B 40 ? 48 2B C1 48 C1 F8 ? 66 3B D0 73 17"));
+        static name namef = reinterpret_cast<name>(SigScan("48 83 EC ?? 48 8B 81 ?? ?? ?? ?? 48 85 C0 74 3B 48 8B 08 BA ?? ?? ?? ?? 48 8B 40 ?? 48 2B C1 48 C1 F8 ?? 66 3B D0 73 17"));
 
         return namef(this);
     }
 
     int getEntityTypeID() {
-        using getEntityTypeID = int(*)(Actor*);
-        static getEntityTypeID getEntityTypeIDFunc = reinterpret_cast<getEntityTypeID>(SigScan("48 83 EC ? 8B 41 ? 48 8D 54 24 ? 48 8B 49 ? 89 44 24 ? E8 ? ? ? ? 48 85 C0 74 ? 8B 00 48 83 C4 ? C3 E8 ? ? ? ? CC CC CC CC CC CC 48 83 EC"));//1.20.8x
-        return getEntityTypeIDFunc(this);
+        static uintptr_t address = SigScan("4C 8B 41 ?? 4C 8B D1 48 8B 41 ?? 4C 8B 49 ?? 49 2B C0 8B 12 48 C1 F8 ?? 48 FF C8 25 14 AD");//1.20.8x
+        return (unsigned int)*getComponent<__int64*>(address);
     }
 
     bool canOpenContainerScreen() {
@@ -238,7 +246,6 @@ public:
         static getEffectMe getEffectFunc = reinterpret_cast<getEffectMe>(SigScan("40 53 48 83 EC ?? 8B 41 ?? 8B 5A ?? 48 8D 54 24 ?? 48 8B 49 ?? 89 44 24 ?? E8 ?? ?? ?? ?? 48 85 C0 74 34"));//1.20.8x
         if (getEffectFunc) return getEffectFunc(this, effect);
         return nullptr;
-
     }
 
     vec2* getRotationPrev()

@@ -12,20 +12,46 @@ void MemoryUtils::restore() {
 	MH_RemoveHook(MH_ALL_HOOKS);
 	MH_Uninitialize();
 }
-uintptr_t MemoryUtils::findSig(std::string_view signature) {
-    auto result = SigScanSafe(signature);
-    if (!result.has_value()) writelog("Failed to find signature \"%s\"", signature.data());
-    return result.value();
+uintptr_t MemoryUtils::findSig(const char* szSignature) {
+	const char* szModule = "Minecraft.windows.exe";
+	const char* pattern = szSignature;
+	uintptr_t firstMatch = 0;
+	static const auto rangeStart = (uintptr_t)GetModuleHandleA(szModule);
+	static MODULEINFO miModInfo;
+	static bool init = false;
+	if (!init) {
+		init = true;
+		GetModuleInformation(GetCurrentProcess(), (HMODULE)rangeStart, &miModInfo, sizeof(MODULEINFO));
+	}
+	static const uintptr_t rangeEnd = rangeStart + miModInfo.SizeOfImage;
+	BYTE patByte = GET_BYTE(pattern);
+	const char* oldPat = pattern;
+	for (uintptr_t pCur = rangeStart; pCur < rangeEnd; pCur++) {
+		if (!*pattern)
+			return firstMatch;
+		while (*(PBYTE)pattern == ' ')
+			pattern++;
+		if (!*pattern)
+			return firstMatch;
+		if (oldPat != pattern) {
+			oldPat = pattern;
+			if (*(PBYTE)pattern != '\?')
+				patByte = GET_BYTE(pattern);
+		}
+		if (*(PBYTE)pattern == '\?' || *(BYTE*)pCur == patByte) {
+			if (!firstMatch)
+				firstMatch = pCur;
+			if (!pattern[2] || !pattern[1])
+				return firstMatch;
+			pattern += 2;
+		}
+		else {
+			pattern = szSignature;
+			firstMatch = 0;
+		}
+	}
+
+	const char* sig = szSignature;
+	writelog("dead");
+	return 0u;
 } 
-
-std::optional<uintptr_t> MemoryUtils::SigScanSafe(std::string_view signature) {
-    const auto parsed = hat::parse_signature(signature);
-    if (!parsed.has_value()) writelog("Invalid signature! %s", signature.data());
-
-    const auto begin = reinterpret_cast<std::byte*>(getBase());
-    const auto end = begin + GetMinecraftSize();
-    const auto result = hat::find_pattern(begin, end, parsed.value());
-
-    if (!result.has_result()) return std::nullopt;
-    return reinterpret_cast<uintptr_t>(result.get());
-}

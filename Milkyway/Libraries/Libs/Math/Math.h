@@ -6,6 +6,7 @@
 #include <minwindef.h>
 #include <corecrt_math.h>
 #include <random>
+#include <iomanip>
 #include "../ImGui/imgui.h"
 
 __forceinline double animate(double endPoint, double current, double speed) {
@@ -66,6 +67,21 @@ __forceinline static std::string eraseDP(float num, int digits) { //erase decima
 	}
 	return toOutput;
 };
+
+__forceinline static float toFixed(float input, int digits) {
+	double scale = std::pow(10.0f, digits);
+	return std::round(input * scale) / scale;
+}
+
+__forceinline static std::string removeZero(std::string input) {
+	for (int i = 0; i <= input.length(); ++i) {
+		if (input.at(input.length() - 1) == '0') {
+			input.erase(input.end() - 1);
+		}
+	}
+
+	return input;
+}
 
 __forceinline static std::string secToMinStr(int second) {
 	int sec = second % 60;
@@ -441,6 +457,10 @@ struct vec4 {
 	float& operator[](int i) { return v[i]; };
 	float operator[](int i) const { return v[i]; };
 
+	__forceinline vec4 add(vec4 rect) {
+		return vec4(x + rect.x, y + rect.y, z + rect.z, w + rect.w);
+	}
+
 	__forceinline bool contains(vec2* point) {
 		if (point->x <= x || point->y <= y)
 			return false;
@@ -449,6 +469,10 @@ struct vec4 {
 			return false;
 		return true;
 	};
+
+	__forceinline std::string toString() {
+		return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w);
+	}
 };
 
 struct glmatrixf {

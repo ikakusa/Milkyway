@@ -10,6 +10,7 @@
 #include "McJson/McJson.h"
 #include "MobEffect/MobEffect.h"
 #include "Actor/Actor.h"
+#include "Actor/LocalPlayer.h"
 #include "ScreenView/ScreenView.h"
 #include "ScreenCtx/ScreenCtx.h"
 #include "RenderContext/RenderContext.h"

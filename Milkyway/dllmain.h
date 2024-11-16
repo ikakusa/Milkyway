@@ -5,5 +5,6 @@
 
 class dllmain {
 public:
+	static HMODULE mod;
 	static bool isRunning;
 };
