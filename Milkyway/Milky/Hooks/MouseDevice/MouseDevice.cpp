@@ -21,11 +21,13 @@ void MouseDeviceHook::feed::handle(__int64 mouseDevice, char buttonId, char isDo
 			io.MouseDown[0] = isDown;
 			g_Data.isLeftClickDown = isDown;
 			g_Data.leftClick = true;
+			if (isDown) g_Data.cpsLeft2++;
 			break;
 		case 2: //RMB
 			io.MouseDown[1] = isDown;
 			g_Data.isRightClickDown = isDown;
 			g_Data.rightClick = true;
+			if (isDown) g_Data.cpsRight2++;
 			break;
 		case 3: { //MMB
 			io.MouseDown[2] = isDown;

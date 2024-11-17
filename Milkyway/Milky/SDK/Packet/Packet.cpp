@@ -51,6 +51,17 @@ PlaySoundPacket::PlaySoundPacket() {
 //
 
 //1.21.4x
+SetTitlePacket::SetTitlePacket() {
+	static uintptr_t** SetTitlePacketVtable = 0x0;
+	if (SetTitlePacketVtable == 0x0) {
+		uintptr_t sigOffset = SigScan("48 8D 0D ?? ?? ?? ?? C7 40 ?? ?? ?? ?? ?? C7 40 ?? ?? ?? ?? ?? 48 89 78 ?? 48 89 48 ?? C7 40 ?? ?? ?? ?? ?? C7 40 ?? ?? ?? ?? ?? 66 89 78 ?? 48 89 78 ?? 89 78 ?? 89 78");
+		int offset = *reinterpret_cast<int*>(sigOffset + 3);
+		SetTitlePacketVtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + 7);
+	}
+}
+//
+
+//1.21.4x
 PlayerAuthInputPacket::PlayerAuthInputPacket() {
 	static uintptr_t** PlayerAuthInputPacketVtable = 0x0;
 	if (PlayerAuthInputPacketVtable == 0x0) {

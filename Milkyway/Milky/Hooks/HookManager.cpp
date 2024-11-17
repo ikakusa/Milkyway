@@ -21,6 +21,9 @@ void HookManager::initHooks() {
 	hooks.push_back(new ItemHook::appendFormattedHoverText());
 	hooks.push_back(new ClientInstanceHook::MinecraftHook::update());
 	hooks.push_back(new MouseDeviceHook::feed());
+	hooks.push_back(new ActorHook::Hurt());
+	hooks.push_back(new LoopbackHook::PacketHandlerDispatcherInstanceHook::HandleTextPacket());
+	hooks.push_back(new LoopbackHook::PacketHandlerDispatcherInstanceHook::HandleSetTitlePacket());
 	
 	for (auto hook : hooks) {
 		if (hook->Initialize()) {

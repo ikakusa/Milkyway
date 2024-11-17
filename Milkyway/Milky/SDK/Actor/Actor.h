@@ -64,6 +64,20 @@ struct ActorEquipmentComponent {
     class SimpleContianer* mOffhandContainer;
     class SimpleContainer* mArmorContainer;
 };
+class Actor;
+class ActorDamageSource {
+public:
+    BUILD_ACCESS(uintptr_t**, vtable, 0x0);
+    BUILD_ACCESS(BYTE, cause, 0x8);
+};
+
+class ActorDamageByActorSource : public ActorDamageSource {
+public:
+    BUILD_ACCESS(bool, isCreative, 0x18);
+    BUILD_ACCESS(int, entityTypeid, 0x28);
+    BUILD_ACCESS(std::string, nametag, 0x30);
+};
+
 class Actor {
 public:
     template<typename RetType>

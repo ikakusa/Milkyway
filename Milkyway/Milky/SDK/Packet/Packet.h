@@ -31,6 +31,37 @@ public:
 	}
 };
 
+enum SetTitleType {
+
+	Clear,
+	Reset_0,
+	Title,
+	Subtitle,
+	Actionbar,
+	Times,
+	TitleTextObject,
+	SubtitleTextObject,
+	ActionbarTextObject,
+
+};
+
+
+class SetTitlePacket : public Packet {
+
+public:
+	SetTitleType type;         // 0x30
+	std::string text;              // 0x50
+	float fadeInTime;   // 0x70
+	float stayTime;  // 0x88
+	float fadeOutTime;
+
+	std::string xuid;
+	std::string platformId;
+
+	SetTitlePacket();
+};
+
+
 enum class InputData : int {
 	Ascend = 0x0,
 	Descend = 0x1,

@@ -3,6 +3,18 @@
 #include "../Hooks.h"
 
 namespace ActorHook {
+	class Hurt : public Hook {
+	private:
+		static inline std::unique_ptr<FuncHook> funcPtr;
+	public:
+		Hurt() : Hook("Actor::hurt") {}
+		static bool handle(Actor* _this, ActorDamageByActorSource* src, int damage, bool knoick, bool ignite);
+		bool Initialize() override {
+			uintptr_t address = SigScan("40 53 56 41 56 48 83 EC ?? 48 8B 01");
+			return CreateHook(funcPtr, address, handle);
+		}
+	};
+	
 	namespace LocalPlayerHook {
 		class NormalTick : public Hook {
 		private:

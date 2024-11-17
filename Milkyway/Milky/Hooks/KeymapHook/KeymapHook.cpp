@@ -10,11 +10,17 @@ void KeyboardHook::Feed::handle(unsigned char key, bool isDown) {
 		
 		g_Data.updateGameData(key, isDown);
 		
+		if (!g_Data.getMCGame()->canMove && g_Data.isKeyDown(clickgui->getKeybind())) {
+			clickgui->toggle(); 
+			return;
+		}
+		if (g_Data.isKeyDown(VK_ESCAPE)) clickgui->setEnabled(false);
+
 		if (isDown && clickgui->isEnabled() && ((key == VK_OEM_2) || (key == 0x2E) || (key == 0x08) || (key == 0x20) || (key >= 0x60 && key <= 0x6D) || (key >= 0x30 && key <= 0x5A))) {
 			ImGuiUtils::UpdateTextBoxText(ImGuiUtils::searchQuery, key);
 			return;
 		}
-		if (g_Data.getMCGame()->canMove) moduleMgr.onKey(key, isDown);
+		if (g_Data.getMCGame()->canMove || clickgui->isEnabled()) moduleMgr.onKey(key, isDown);
 		return oFunc(key, isDown);
 	}
 }

@@ -23,9 +23,16 @@ public:
 	static inline bool isRightClickDown = false;
 	static inline bool isLeftClickDown = false;
 
+	static inline int cpsLeft = 0;
+	static inline int cpsLeft2 = 0;
+	static inline int cpsRight = 0;
+	static inline int cpsRight2 = 0;
+
 	static inline bool rightClick = false;
 	static inline bool leftClick = false;
 	static inline bool midClick = false;
+	static inline std::map<std::string, bool> hudmap;
+	static inline std::string dragModule;
 	static inline std::vector<HUD*> hud = {};
 
 	ClientInstance* clientinstance = nullptr;

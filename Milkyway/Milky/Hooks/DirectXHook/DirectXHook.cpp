@@ -25,7 +25,6 @@ void DXHook::onImGuiRender(ImDrawList* d) {
 	if (guidata) {
 
 		vec2 windowSize = guidata->windowSizeReal;
-		moduleMgr.onImGuiRender(d);
 		notify.drawNotifications(d);
 		ImGuiUtils::drawTextGlow(vec2((windowSize.x / 2) - ImGuiUtils::getTextWidth(1.f, "kamakiri bootleg"), 10.f), "kamakiri bootleg", UIColor(255, 255, 255), 1.35f, 100.f);
 		ImGuiUtils::drawText("kamakiri bootleg", UIColor(255, 255, 255), vec2((windowSize.x / 2) - ImGuiUtils::getTextWidth(1.f, "kamakiri bootleg"), 10.f), 2.f);
@@ -108,6 +107,7 @@ void DXHook::onImGuiRender(ImDrawList* d) {
 				}
 			}
 		}
+		moduleMgr.onImGuiRender(d);
 	}
 }
 

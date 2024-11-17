@@ -288,6 +288,7 @@
     <ClInclude Include="Milky\Modules\Visual\BetterHoverText.h" />
     <ClInclude Include="Milky\Modules\Visual\Brightness.h" />
     <ClInclude Include="Milky\Modules\Visual\ClickGui.h" />
+    <ClInclude Include="Milky\Modules\Visual\CPS.h" />
     <ClInclude Include="Milky\Modules\Visual\HUDEditor.h" />
     <ClInclude Include="Milky\Modules\Visual\NotificationMod.h" />
     <ClInclude Include="Milky\Notify\Notification.h" />
@@ -366,6 +367,7 @@
     <ClCompile Include="Milky\Modules\ModuleManager.cpp" />
     <ClCompile Include="Milky\Modules\Visual\Brightness.cpp" />
     <ClCompile Include="Milky\Modules\Visual\ClickGui.cpp" />
+    <ClCompile Include="Milky\Modules\Visual\CPS.cpp" />
     <ClCompile Include="Milky\Modules\Visual\HUDEditor.cpp" />
     <ClCompile Include="Milky\Notify\Notification.cpp" />
     <ClCompile Include="Milky\SDK\Actor\Actor.cpp" />

@@ -34,6 +34,7 @@ public:
             Address = SigScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B F9 48 89 4C 24 ?? 33 ED 81");
         }
 
+        std::shared_ptr<Packet>* result = nullptr;
         auto pFunction = reinterpret_cast<std::shared_ptr<Packet>(__fastcall*)(int)>(Address);
         return pFunction(packetId);
     }

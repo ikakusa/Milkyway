@@ -13,3 +13,8 @@ int ActorHook::MobHook::getCurrentSwingDurationHook::handle(Actor* ent) {
 	}
 	return oFunc(ent);
 }
+
+bool ActorHook::Hurt::handle(Actor* ent, ActorDamageByActorSource* src, int damage, bool knoick, bool ignite) {
+	static auto oFunc = funcPtr->GetFastcall<bool, Actor*, ActorDamageSource*, int, bool, bool>();
+	return oFunc(ent, src, damage, knoick, ignite);
+}

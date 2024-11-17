@@ -1,20 +1,20 @@
-#include "ReachDisplay.h"
+#include "CPS.h"
 
-void ReachDisplay::onEnable() {
+void CPS::onEnable() {
 }
 
-void ReachDisplay::onDisable() {
+void CPS::onDisable() {
 }
 
-void ReachDisplay::onImGuiRender(ImDrawList* d) {
+void CPS::onImGuiRender(ImDrawList* d) {
 	auto guidata = g_Data.getGuiData();
 	auto lp = g_Data.getLocalPlayer();
 
 	if (guidata) {
-		std::string str = StringUtils::combine("Reach: ", g_Data.reachStr);
+		std::string str = StringUtils::combine(std::to_string(g_Data.cpsLeft), " | ", std::to_string(g_Data.cpsRight));
 		float fontsize = fontSize;
 		vec2 windowSize = guidata->windowSizeReal;
-		float width = 80.f * fontsize;
+		float width = 55.f * fontsize;
 		float height = ImGuiUtils::getTextHeight(fontsize, str);
 		vec2 mousePos = g_Data.mousePos;
 
@@ -24,14 +24,13 @@ void ReachDisplay::onImGuiRender(ImDrawList* d) {
 		}
 
 		if (!g_Data.isLeftClickDown) {
-			g_Data.hudmap[this->getModuleName()] = false;
 			isDragging = false;
 			g_Data.dragModule = "";
 		}
 
 		vec4 pos = vec4(posX, posY, posX + width + 10.f, posY + height + 10.f);
 		d->PushClipRect(ImVec2(pos.x, pos.y), ImVec2(pos.z, pos.w), true);
-
+		
 		if (guidata->windowSizeReal.x <= pos.z) posX -= 1.f;
 		if (-1.f >= pos.x) posX += 1.f;
 		if (guidata->windowSizeReal.y <= pos.w) posY -= 1.f;
@@ -47,7 +46,7 @@ void ReachDisplay::onImGuiRender(ImDrawList* d) {
 		}
 		if (lp) {
 			ImGuiUtils::fillRect(pos, UIColor(0, 0, 0, 100));
-			ImGuiUtils::drawText(str, UIColor(255, 255, 255), vec2(pos.x + 5.f, pos.y + 5.f), fontsize);
+			ImGuiUtils::drawText(str, UIColor(255, 255, 255), vec2(pos.x + 13.5f, pos.y + 5.f), fontsize);
 		}
 		d->PopClipRect();
 	}

@@ -10,6 +10,7 @@ bool ModuleManager::Initialize() {
 		add<ClickGui>();
 		add<AutoGG>();
 		add<AutoRequeue>();
+		add<CPS>();
 	}
 
 	initialized = true;

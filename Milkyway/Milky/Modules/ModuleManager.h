@@ -9,6 +9,7 @@
 #include "Misc/AutoGG.h"
 #include "Misc/AutoReQueue.h"
 #include "Visual/HUDEditor.h"
+#include "Visual/CPS.h"
 
 using json = nlohmann::json;
 extern class ModuleManager moduleMgr;
